@@ -5,7 +5,7 @@ const Movie = mongoose.model("movies");
 const { calculateAverage } = require("../utils/calculateAverage");
 
 module.exports = app => {
-  app.post("/api/movies", async (req, res) => {
+  app.post("/api/addMovie", async (req, res) => {
     const { name, genre, year, averageRating, numberOfRatings } = req.body;
     const movie = new Movie({
       name,
@@ -23,8 +23,8 @@ module.exports = app => {
     }
   });
 
-  app.get("/api/movies/:genre/:start/:end", async (req, res) => {
-    const { genre, start, end } = req.params;
+  app.post("/api/searchMovies", async (req, res) => {
+    const { genre, start, end } = req.body;
 
     try {
       const movies = await Movie.find({
@@ -40,9 +40,8 @@ module.exports = app => {
     }
   });
 
-  app.patch("/api/movies/:name", async (req, res) => {
-    const name = req.params.name;
-    const { rating } = req.body;
+  app.patch("/api/rateMovie", async (req, res) => {
+    const { name, rating } = req.body;
     if (rating < 0 || rating > 10)
       res.status(422).send("the rating is an invalid number");
     try {
